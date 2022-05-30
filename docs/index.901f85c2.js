@@ -515,37 +515,66 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"edeGs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _pixiJs = require("pixi.js");
-var _fishPng = require("./images/fish.png");
-var _fishPngDefault = parcelHelpers.interopDefault(_fishPng);
-var _bubblePng = require("./images/bubble.png");
-var _bubblePngDefault = parcelHelpers.interopDefault(_bubblePng);
-var _waterJpg = require("./images/water.jpg");
-var _waterJpgDefault = parcelHelpers.interopDefault(_waterJpg);
-//
-// STAP 1 - maak een pixi canvas
-//
-const pixi = new _pixiJs.Application({
-    width: 800,
-    height: 450
-});
-document.body.appendChild(pixi.view);
-//
-// STAP 2 - preload alle afbeeldingen
-//
-const loader = new _pixiJs.Loader();
-loader.add('fishTexture', _fishPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('waterTexture', _waterJpgDefault.default);
-loader.load(()=>loadCompleted()
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Game", ()=>Game
 );
-//
-// STAP 3 - maak een sprite als de afbeeldingen zijn geladen
-//
-function loadCompleted() {
-    let fish = new _pixiJs.Sprite(loader.resources["fishTexture"].texture);
-    pixi.stage.addChild(fish);
+var _pixiJs = require("pixi.js");
+var _coverPng = require("./images/cover.png");
+var _coverPngDefault = parcelHelpers.interopDefault(_coverPng);
+var _assets = require("./assets");
+var _brandaan = require("./brandaan");
+class Game {
+    pixiWidth = 800;
+    pixiHeight = 500;
+    constructor(){
+        // this._pixi = new PIXI.Application({ width: 1440, height: 900})
+        this.pixi = new _pixiJs.Application({
+            width: this.pixiWidth,
+            height: this.pixiHeight,
+            backgroundColor: 1087931
+        });
+        document.body.appendChild(this.pixi.view);
+        new _assets.Assets(this);
+        this.loader = new _pixiJs.Loader();
+        this.loader.add('coverTexture', _coverPngDefault.default);
+        this.loader.load(()=>this.spriteLoadCompleted()
+        );
+    }
+    loadCompleted() {
+        //create brandaan mn niffouw
+        let frames = this.createBrandaanFrames();
+        this.brandaan = new _brandaan.Brandaan(this, frames, 50, 50);
+        //let brandaan move
+        this.pixi.ticker.add((delta)=>this.update(delta)
+        );
+    }
+    spriteLoadCompleted() {
+        //create background
+        let cover = new _pixiJs.Sprite(this.loader.resources["coverTexture"].texture);
+        cover.height = this.pixiHeight;
+        cover.width = this.pixiWidth;
+        this.pixi.stage.addChild(cover);
+    }
+    update(delta) {
+        this.brandaan.update(delta);
+    }
+    createBrandaanFrames() {
+        // create an array of textures from an image path
+        let frames = [];
+        let runFrames = [];
+        for(let i = 1; i <= 6; i++)// magically works since the spritesheet was loaded with the pixi loader
+        frames.push(_pixiJs.Texture.from(`brandaan_${i}`));
+        for(let i1 = 7; i1 <= 12; i1++)// magically works since the spritesheet was loaded with the pixi loader
+        runFrames.push(_pixiJs.Texture.from(`brandaan_${i1}`));
+        return [
+            frames,
+            runFrames
+        ];
+    }
 }
+let game = new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/water.jpg":"jj9Eg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cover.png":"9pV12","./assets":"jyCU7","./brandaan":"j22td","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37042,8 +37071,8 @@ function __extends(d, b) {
     return AnimatedSprite1;
 }(_sprite.Sprite);
 
-},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3tLwD":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "fish.510b053c.png" + "?" + Date.now();
+},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9pV12":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "cover.8ea64da4.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -37079,12 +37108,124 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"iMP3P":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "bubble.56ab0ad6.png" + "?" + Date.now();
+},{}],"jyCU7":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Assets", ()=>Assets
+);
+var _pixiJs = require("pixi.js");
+class Assets extends _pixiJs.Loader {
+    assets = [];
+    constructor(game){
+        super();
+        this.game = game;
+        this.assets = [
+            {
+                name: "brandaanJson",
+                url: "brandaan.json"
+            }, 
+        ];
+        this.assets.forEach((asset)=>{
+            this.add(asset.name, asset.url);
+        });
+        this.onError.add((arg)=>{
+            console.error(arg);
+        });
+        this.onProgress.add((loader)=>this.showProgress(loader)
+        );
+        this.load(()=>game.loadCompleted()
+        );
+    }
+    showProgress(loader) {
+        console.log(`Loading ${loader.progress}%`);
+    }
+}
 
-},{"./helpers/bundle-url":"lgJ39"}],"jj9Eg":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "water.59ff4e4f.jpg" + "?" + Date.now();
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j22td":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Brandaan", ()=>Brandaan
+);
+var _pixiJs = require("pixi.js");
+class Brandaan extends _pixiJs.AnimatedSprite {
+    xSpeed = 0;
+    ySpeed = 0;
+    frames = [];
+    constructor(game, textures, x, y){
+        super(textures[0]);
+        this.game = game;
+        this.frames = textures;
+        this.x = x;
+        this.y = y;
+        this.anchor.set(0.5);
+        this.scale.set(3);
+        this.animationSpeed = 0.1;
+        this.loop = true;
+        this.play();
+        this.game.pixi.stage.addChild(this);
+        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
+        );
+        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
+        );
+    }
+    onKeyDown(e) {
+        switch(e.key.toUpperCase()){
+            case "A":
+            case "ARROWLEFT":
+                this.xSpeed = -3;
+                this.scale.set(-3, 3);
+                this.setFrames(1);
+                break;
+            case "D":
+            case "ARROWRIGHT":
+                this.xSpeed = 3;
+                this.scale.set(3);
+                this.setFrames(1);
+                break;
+            case "W":
+            case "ARROWUP":
+                this.ySpeed = -3;
+                this.setFrames(1);
+                break;
+            case "S":
+            case "ARROWDOWN":
+                this.ySpeed = 3;
+                this.setFrames(1);
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch(e.key.toUpperCase()){
+            case " ":
+                break;
+            case "A":
+            case "D":
+            case "ARROWLEFT":
+            case "ARROWRIGHT":
+                this.xSpeed = 0;
+                this.setFrames(0);
+                break;
+            case "W":
+            case "S":
+            case "ARROWUP":
+            case "ARROWDOWN":
+                this.ySpeed = 0;
+                this.setFrames(0);
+                break;
+        }
+    }
+    setFrames(frame) {
+        this.textures = this.frames[frame];
+        this.loop = true;
+        this.play();
+    }
+    update(delta) {
+        super.update(delta);
+        this.x += this.xSpeed * delta;
+        this.y += this.ySpeed * delta;
+    }
+}
 
-},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
