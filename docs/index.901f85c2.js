@@ -521,11 +521,20 @@ parcelHelpers.export(exports, "Game", ()=>Game
 var _pixiJs = require("pixi.js");
 var _coverPng = require("./images/cover.png");
 var _coverPngDefault = parcelHelpers.interopDefault(_coverPng);
+var _knightPng = require("./images/knight.png");
+var _knightPngDefault = parcelHelpers.interopDefault(_knightPng);
+var _farmerPng = require("./images/farmer.png");
+var _farmerPngDefault = parcelHelpers.interopDefault(_farmerPng);
+var _landlordPng = require("./images/landlord.png");
+var _landlordPngDefault = parcelHelpers.interopDefault(_landlordPng);
+var _knight = require("./knight");
+var _farmer = require("./farmer");
 var _assets = require("./assets");
 var _brandaan = require("./brandaan");
 class Game {
     pixiWidth = 800;
     pixiHeight = 500;
+    characters = [];
     constructor(){
         // this._pixi = new PIXI.Application({ width: 1440, height: 900})
         this.pixi = new _pixiJs.Application({
@@ -537,6 +546,9 @@ class Game {
         new _assets.Assets(this);
         this.loader = new _pixiJs.Loader();
         this.loader.add('coverTexture', _coverPngDefault.default);
+        this.loader.add('knightTexture', _knightPngDefault.default);
+        this.loader.add('farmerTexture', _farmerPngDefault.default);
+        this.loader.add('landlordTexture', _landlordPngDefault.default);
         this.loader.load(()=>this.spriteLoadCompleted()
         );
     }
@@ -547,6 +559,18 @@ class Game {
         //let brandaan move
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
+        //create knight
+        let knight = new _knight.Knight(this.loader.resources["knightTexture"].texture, this, 800, 50);
+        this.characters.push(knight);
+        this.pixi.stage.addChild(knight);
+        //create farmer
+        let farmer = new _farmer.Farmer(this.loader.resources["farmerTexture"].texture, this, 400, 200);
+        this.characters.push(farmer);
+        this.pixi.stage.addChild(farmer);
+        //create landlord
+        let landlord = new _farmer.Farmer(this.loader.resources["landlordTexture"].texture, this, 1000, 300);
+        this.characters.push(landlord);
+        this.pixi.stage.addChild(landlord);
     }
     spriteLoadCompleted() {
         //create background
@@ -574,7 +598,7 @@ class Game {
 }
 let game = new Game();
 
-},{"pixi.js":"dsYej","./images/cover.png":"9pV12","./assets":"jyCU7","./brandaan":"j22td","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cover.png":"9pV12","./assets":"jyCU7","./brandaan":"j22td","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/knight.png":"g6XyF","./images/farmer.png":"9BQiJ","./images/landlord.png":"7zXGs","./knight":"1MEgH","./farmer":"6BICu"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37232,6 +37256,61 @@ class Brandaan extends _pixiJs.AnimatedSprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g6XyF":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "knight.e1e4dec4.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"9BQiJ":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "farmer.73f4aff5.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"7zXGs":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "landlord.ff033fb2.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"1MEgH":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Knight", ()=>Knight
+);
+var _character = require("./character");
+class Knight extends _character.Character {
+    constructor(texture, game, x, y){
+        super(texture, game);
+        this.game = game;
+        this.x = x;
+        this.y = y;
+    }
+}
+
+},{"./character":"a2c8k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a2c8k":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Character", ()=>Character
+);
+var _pixiJs = require("pixi.js");
+class Character extends _pixiJs.Sprite {
+    constructor(texture, game){
+        super(texture);
+        this.game = game;
+        this.texture = texture;
+        this.scale.set(-3, 3);
+        this.anchor.set(0.5);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6BICu":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Farmer", ()=>Farmer
+);
+var _character = require("./character");
+class Farmer extends _character.Character {
+    constructor(texture, game, x, y){
+        super(texture, game);
+        this.game = game;
+        this.x = x;
+        this.y = y;
+    }
+}
+
+},{"./character":"a2c8k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
