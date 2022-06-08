@@ -99,5 +99,13 @@ export class Brandaan extends PIXI.AnimatedSprite {
         super.update(delta)
         this.x += this.xSpeed * delta
         this.y += this.ySpeed * delta
+
+        this.keepInScreen()
+    }
+
+    private keepInScreen(){
+        if(this.getBounds().left > this.game.pixi.screen.right){
+            this.x =-this.getBounds().width
+        }
     }
 }

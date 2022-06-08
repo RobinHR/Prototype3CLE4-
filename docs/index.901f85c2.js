@@ -560,15 +560,15 @@ class Game {
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
         //create knight
-        let knight = new _knight.Knight(this.loader.resources["knightTexture"].texture, this, 800, 50);
+        let knight = new _knight.Knight(this.loader.resources["knightTexture"].texture, this, 700, 50);
         this.characters.push(knight);
         this.pixi.stage.addChild(knight);
         //create farmer
-        let farmer = new _farmer.Farmer(this.loader.resources["farmerTexture"].texture, this, 400, 200);
+        let farmer = new _farmer.Farmer(this.loader.resources["farmerTexture"].texture, this, 750, 400);
         this.characters.push(farmer);
         this.pixi.stage.addChild(farmer);
         //create landlord
-        let landlord = new _farmer.Farmer(this.loader.resources["landlordTexture"].texture, this, 1000, 300);
+        let landlord = new _farmer.Farmer(this.loader.resources["landlordTexture"].texture, this, 100, 300);
         this.characters.push(landlord);
         this.pixi.stage.addChild(landlord);
     }
@@ -37253,6 +37253,10 @@ class Brandaan extends _pixiJs.AnimatedSprite {
         super.update(delta);
         this.x += this.xSpeed * delta;
         this.y += this.ySpeed * delta;
+        this.keepInScreen();
+    }
+    keepInScreen() {
+        if (this.getBounds().left > this.game.pixi.screen.right) this.x = -this.getBounds().width;
     }
 }
 
@@ -37291,7 +37295,7 @@ class Character extends _pixiJs.Sprite {
         super(texture);
         this.game = game;
         this.texture = texture;
-        this.scale.set(-3, 3);
+        this.scale.set(-2, 2);
         this.anchor.set(0.5);
     }
 }

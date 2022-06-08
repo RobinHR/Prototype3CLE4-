@@ -8,7 +8,7 @@ export class Character extends PIXI.Sprite{
         super(texture)
         this.game = game
         this.texture = texture 
-        this.scale.set(-3, 3) 
+        this.scale.set(-2, 2) 
         this.anchor.set(0.5)
     }
 }
