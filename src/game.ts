@@ -13,10 +13,10 @@ export class Game {
     private pixiWidth = 800
     private pixiHeight = 500
     
-    pixi: PIXI.Application
-    loader: PIXI.Loader
-    brandaan: Brandaan
-    characters: Character[] = []
+    public pixi: PIXI.Application
+    private loader: PIXI.Loader
+    private brandaan: Brandaan
+    private characters: Character[] = []
 
     constructor() {
 
