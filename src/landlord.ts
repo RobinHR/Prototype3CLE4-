@@ -2,7 +2,7 @@ import { Game } from "./game"
 import { Character } from "./character"
 import * as PIXI from 'pixi.js'
 
-export class Knight extends Character{
+export class Landlord extends Character{
     public game: Game
 
     constructor(texture: PIXI.Texture, game: Game, x: number, y:number){
@@ -10,6 +10,8 @@ export class Knight extends Character{
         this.game = game
         this.x = x
         this.y = y
+
+        this.interactive = true
     }
 }
 

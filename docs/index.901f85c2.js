@@ -531,6 +531,8 @@ var _knight = require("./knight");
 var _farmer = require("./farmer");
 var _assets = require("./assets");
 var _brandaan = require("./brandaan");
+var _button = require("./button");
+var _landlord = require("./landlord");
 class Game {
     pixiWidth = 800;
     pixiHeight = 500;
@@ -568,9 +570,15 @@ class Game {
         this.characters.push(farmer);
         this.pixi.stage.addChild(farmer);
         //create landlord
-        let landlord = new _farmer.Farmer(this.loader.resources["landlordTexture"].texture, this, 100, 300);
+        let landlord = new _landlord.Landlord(this.loader.resources["landlordTexture"].texture, this, 100, 300);
         this.characters.push(landlord);
         this.pixi.stage.addChild(landlord);
+        landlord.on('click', ()=>this.onClick()
+        );
+    }
+    onClick() {
+        let button = new _button.Button(100, 250, 'hoi');
+        this.pixi.stage.addChild(button);
     }
     spriteLoadCompleted() {
         //create background
@@ -598,7 +606,7 @@ class Game {
 }
 let game = new Game();
 
-},{"pixi.js":"dsYej","./images/cover.png":"9pV12","./assets":"jyCU7","./brandaan":"j22td","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/knight.png":"g6XyF","./images/farmer.png":"9BQiJ","./images/landlord.png":"7zXGs","./knight":"1MEgH","./farmer":"6BICu"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/cover.png":"9pV12","./assets":"jyCU7","./brandaan":"j22td","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/knight.png":"g6XyF","./images/farmer.png":"9BQiJ","./images/landlord.png":"7zXGs","./knight":"1MEgH","./farmer":"6BICu","./landlord":"PxGYI","./button":"hHDeU"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37315,6 +37323,51 @@ class Farmer extends _character.Character {
     }
 }
 
-},{"./character":"a2c8k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"./character":"a2c8k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"PxGYI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Landlord", ()=>Landlord
+);
+var _character = require("./character");
+class Landlord extends _character.Character {
+    constructor(texture, game, x, y){
+        super(texture, game);
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.interactive = true;
+    }
+}
+
+},{"./character":"a2c8k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Button", ()=>Button
+);
+var _pixiJs = require("pixi.js");
+class Button extends _pixiJs.Graphics {
+    constructor(x, y, text){
+        super();
+        this.innerHTML = text;
+        this.beginFill(16711680);
+        this.drawRoundedRect(0, 0, 380, 90, 15);
+        this.endFill();
+        this.x = x - this.getBounds().width / 2;
+        this.y = y - this.getBounds().height / 2;
+        const buttonText = new _pixiJs.Text(this.innerHTML, {
+            "align": "center",
+            "fontFamily": "Comic Sans MS",
+            "fontSize": 50
+        });
+        buttonText.x = this.getBounds().width / 2;
+        buttonText.y = this.getBounds().height / 2;
+        buttonText.anchor.set(0.5);
+        this.addChild(buttonText);
+        this.buttonMode = true;
+        this.interactive = true;
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map

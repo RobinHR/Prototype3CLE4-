@@ -8,11 +8,13 @@ import { Knight } from './knight'
 import { Farmer } from './farmer'
 import { Assets } from './assets'
 import { Brandaan } from './brandaan'
+import { Button } from './button'
+import { Landlord } from './landlord'
 
 export class Game {
     private pixiWidth = 800
     private pixiHeight = 500
-    
+
     public pixi: PIXI.Application
     private loader: PIXI.Loader
     private brandaan: Brandaan
@@ -31,7 +33,7 @@ export class Game {
         this.loader.add('knightTexture', knightImage)
         this.loader.add('farmerTexture', farmerImage)
         this.loader.add('landlordTexture', landlordImage)
-        this.loader.load(()=>this.spriteLoadCompleted());
+        this.loader.load(() => this.spriteLoadCompleted());
     }
 
     public loadCompleted() {
@@ -42,19 +44,26 @@ export class Game {
         this.pixi.ticker.add((delta: number) => this.update(delta))
 
         //create knight
-        let knight = new Knight(this.loader.resources["knightTexture"].texture!, this, 700, 50)   
+        let knight = new Knight(this.loader.resources["knightTexture"].texture!, this, 700, 50)
         this.characters.push(knight)
-        this.pixi.stage.addChild(knight) 
+        this.pixi.stage.addChild(knight)
 
         //create farmer
-        let farmer = new Farmer(this.loader.resources["farmerTexture"].texture!, this, 750, 400)   
+        let farmer = new Farmer(this.loader.resources["farmerTexture"].texture!, this, 750, 400)
         this.characters.push(farmer)
-        this.pixi.stage.addChild(farmer)  
+        this.pixi.stage.addChild(farmer)
 
         //create landlord
-        let landlord = new Farmer(this.loader.resources["landlordTexture"].texture!, this, 100, 300)   
+        let landlord = new Landlord(this.loader.resources["landlordTexture"].texture!, this, 100, 300)
         this.characters.push(landlord)
-        this.pixi.stage.addChild(landlord)  
+        this.pixi.stage.addChild(landlord)
+
+        landlord.on('click', () => this.onClick() )
+    }
+
+    private onClick() {
+        let button = new Button(100, 250, 'hoi')
+        this.pixi.stage.addChild(button)
     }
 
     public spriteLoadCompleted() {
